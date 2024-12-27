@@ -1,0 +1,50 @@
+#Ostanovit API SMPP
+sudo pkill smpp-api
+
+#Proverit kem zanyat poort
+sudo lsof -i :1013
+
+#prava na file
+
+sudo chmod +x /opt/smpp-api/smpp-api
+sudo chown -R your-username:your-username /opt/smpp-api
+
+
+#Zapusk GO Server
+./smpp-api-ubuntu
+
+
+
+#######################################
+#chtobi mojno bilo zapuskat kak apache sdelaem sleduyushee
+sudo nano /etc/systemd/system/smpp-api.service
+
+
+[Unit]
+Description=SMPP API Service
+After=network.target
+
+[Service]
+User=rasim
+WorkingDirectory=/opt/smpp-api/
+ExecStart=/opt/smpp-api/smpp-api-ubuntu
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+
+######################################
+
+sudo systemctl daemon-reload
+
+sudo systemctl start smpp-api
+
+sudo systemctl enable smpp-api
+
+sudo systemctl status smpp-api
+
+#Esli sistema ne puskaet ispolzovat port 1013
+sudo setcap 'cap_net_bind_service=+ep' /opt/smpp-api/smpp-api-ubuntu
+
+
+
